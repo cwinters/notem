@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>${title}</title>
+<link rel="stylesheet" href="/css/main.css" type="text/css" />
+
+<script type="text/javascript" src="/script/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="/script/jquery.toJSON.js"></script>
+<script type="text/javascript" src="/script/jquery.cookiejar.js"></script>
+<script type="text/javascript" src="/script/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="/script/jquery.cookie.js"></script>
+<script type="text/javascript" src="/script/jquery.tablesorter.cookie.js"></script>
+<script type="text/javascript" src="/script/notem.js"></script>
+
+${head}
+
+</head>
+<body>
+
+<div id="mainHeader">
+<h1>Notem</h1>
+</div>
+
+<br clear="all" />
+
+<div id="mainConsoleMenu">
+<ul>
+    <li>
+        [View <a href="/r/notes/${now.getYear()}">year</a>
+              | <a href="/r/notes/${now.getYear()}/${now.getMonthOfYear()}">month</a>
+              | <a href="/r/notes/${now.getYear()}/${now.getMonthOfYear()}/${now.getDayOfMonth()}">day</a>]
+        |
+        <a href="/r/note">Create</a>
+    </li>
+</ul>
+</div>
+
+<br clear="all" />
+
+<div id="searchMenu" align="right">
+    <form name="search" method="GET" action="/r/search">
+        Search: <input type="text" name="q" size="10" />
+        <input type="submit" value="Go" />
+    </form>
+</div>
+
+<br clear="all" />
+
+<div id="mainBody">
+
+    ${body}
+</div>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+body {
+    padding     : 0;
+    margin      : 0;
+    font-size   : small;
+    font-family : sans-serif;
+}
+
+* html body {
+    font-size   : x-small; /* for IE/Win */
+}
+
+#mainHeader {
+    padding-top: 0;
+    padding-left: 0;
+    margin-top: 0;
+    background-color: #cccccc;
+    height: 50px;
+}
+
+#mainHeader h1 {
+    color: #ff6600;
+    text-align: right;
+    padding-top: 15px;
+    padding-right: 5px;
+    margin-top: 0;
+    margin-left: 199px;
+}
+
+#mainConsoleMenu {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  height: 25px;
+  width: 100%;
+  background: #eeeeee;
+  /* font-size: smaller; */
+  margin-top: 0;
+  padding-top: 0;
+}
+
+#searchMenu {
+  position: absolute;
+  top: 75px;
+  height: 30px;
+  width: 100%;
+  background: #ffffcc;
+  margin-top: 0;
+  padding-top: 3px;
+}
+
+
+#mainConsoleMenu ul {
+    display: block;
+    list-style: none;
+    margin: 0 2px 0 0;
+    padding: 6px 0 3px 10px;
+}
+
+#mainConsoleMenu li {
+    display: inline;
+    padding-right: 6px;
+}
+
+#mainConsoleMenu a {
+    text-decoration: none;
+}
+
+pre.sourceCode {
+    border: 2px solid black;
+    background: #cccccc;
+    font-size: larger;
+}
+
+table.sortedTable th {
+    padding: 10px 5px 10px 5px;
+    border: 1px solid #FFF;
+    background : #666;
+    color: #FFF;
+}
+
+table.sortedTable th.selector {
+    width: 10px;
+}
+
+table.sortedTable th.header {
+    background-image: url( /images/sortable.gif );
+    cursor: pointer;
+    font-weight: bold;
+    background-repeat: no-repeat;
+    background-position:right center;
+    padding-left: 10px;
+    padding-right: 20px;
+}
+
+table.sortedTable th.headerSortUp {
+    background-image: url( /images/asc.gif );
+    background-color: #999;
+}
+
+table.sortedTable th.headerSortDown {
+    background-image: url( /images/desc.gif );
+    background-color: #999;
+}
+
+table.sortedTable tr.even {
+    background: #eee;
+}
+
+table.sortedTable tr.odd {
+    background: #ccc;
+}

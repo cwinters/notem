@@ -1,0 +1,1 @@
+lwp-request -m OPTIONS -USe -H "Accept: application/xml" $1

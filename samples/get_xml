@@ -1,0 +1,1 @@
+GET -USe -H "Accept: application/xml" $1

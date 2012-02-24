@@ -1,0 +1,91 @@
+--------------------
+Themes:
+
+   - Unpack and go. No configuration needed -- we'll listen on '*'
+   using some weird-o port by default. You can fire up on :80 if you
+   want.
+
+--------------------
+Storage:
+
+   - To start, just use yyyy/mm/dd as directory structure, then store
+   each note in a file where the order is the ID. That way we can
+   eagerly slurp in a day at a time, which is probably decent
+   granularity. Easy backups, too.
+
+   - Directory should be stored under the startup, and if it doesn't
+   exist it gets initialized.
+
+--------------------
+Operations:
+
+   - Each note returned has:
+      - URL (FQ?)
+      - date (in some standard format)
+      - order in day
+      - ID (serialized date + order? MD5? UUID?)
+      - poster
+      - raw note
+      - html note   
+   - Format is JSON and XML (put note in CDATA)  
+
+GET:
+   /note/2007/05/01/58         - specify single
+   /notes/2007/05/01           - list all on that day
+   /notes/2007/05              - list all on that month
+   /notes/2007/05/01/3-50      - list subset
+   /notes/latest/10            - get the latest n posted
+   /notes/search/?lucene-query - find everything matching the given lucene query
+                                   - "date"    = yyyy/mm or yyyy/mm/dd
+                                   - "poster"  = self-reported poster
+                                   - "keyword" = normal lucene query
+
+POST:
+   /note                       - accepts JSON/XML with content
+
+DELETE:
+   /note/2007/05/01/58         - remove if exists
+
+PUT:
+   /note/2007/05/01/58         - replace if exists, otherwise no-op 
+                                 (we determine order, not you)
+
+--------------------
+Filters:
+
+   - Before data gets sent out it's run through one or more filters.
+
+   - abbreviations/misspellings (eg, we substitute \bYos\b -> Yosemite)
+      - we should be able to build these on the fly, so you can send
+      a message, like: "notem: Yos expands to Yosemite"; these should
+      also be discoverable, so you can say: "notem: list
+      abbreviations"
+
+   - interesting links, also discoverable by topic ("notem: list
+   links with indian") or domain ("notem: list links at
+   wikipedia.org")
+
+   - Wiki text + namespace, so you could setup: "notem: VHS wiki is
+   http://intranet.vocollect.int/../{name}" and then respond to
+   "[VHS:Yosemite]" with the expanded link on display
+
+   - Other links, like JIRA: [JIRA:VHS-214], or even other notes by
+   date [notem:2007-04-01] or specific [notem:2007-04-01,134] (maybe:
+   [notem:2007/04/01] and [notem:2007/04/01/134]
+
+
+--------------------
+Client:
+
+   - Flow: 
+       1) enter your username (whatever you want)
+       2) get popup window with textarea and little else for entry
+       3) original window has search/browse form and common links
+       4) original window also polls for and displays new notes (every
+       few minutes/configurable)
+
+   - Should support disconnected mode (just keep typing, we'll keep
+   trying); if you close the browser you lose the data, so we need a
+   freeze/thaw for what we're trying to send -- click button, get
+   frozen data; click another and get a textarea for pasting the
+   frozen data;

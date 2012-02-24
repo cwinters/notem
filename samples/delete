@@ -1,0 +1,1 @@
+lwp-request -m DELETE -USe -H "Accept: application/json" $1

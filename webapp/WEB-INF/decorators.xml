@@ -1,0 +1,15 @@
+<decorators defaultdir="/decorators">
+
+    <excludes>
+<!-- static resources -->
+        <pattern>/css/*</pattern>
+        <pattern>/images/*</pattern>
+        <pattern>/scripts/*</pattern>
+
+    </excludes>
+
+    <decorator name="main" page="page.ftdec">
+        <pattern>/*</pattern>
+    </decorator>
+
+</decorators>

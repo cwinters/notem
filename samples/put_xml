@@ -1,0 +1,1 @@
+PUT -USe -H 'Accept: application/xml' -c application/xml $1 

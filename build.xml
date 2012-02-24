@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+
+<project name="notem" default="build" basedir=".">
+
+    <property name="notem.version"             value="0.25" />
+    <property name="notem.name"                value="notem" />
+    <property name="notem.fullname"            value="${notem.name}-${notem.version}" />
+
+    <dirname property="notem.dir"              file="${ant.file.notem}" />
+    <property name="notem.lib.dir"             location="${notem.dir}/lib" />
+    <property name="notem.src.dir"             location="${notem.dir}/src" />
+    <property name="notem.build.dir"           location="${notem.dir}/build" />
+    <property name="notem.deploy.dir"          location="${notem.dir}/build/deploy" />
+    <property name="notem.compile.dir"         location="${notem.build.dir}/classes" />
+    <property name="notem.dist.dir"            location="${notem.build.dir}/notem-${notem.version}" />
+    <property name="notem.target"              location="${notem.build.dir}/${notem.fullname}.jar" />
+    <property name="notem.dist.file"           location="${notem.build.dir}/notem-${notem.version}.zip" />
+
+    <path id="notem.build.classpath">
+        <fileset dir="${notem.lib.dir}" includes="*.jar" />
+    </path>
+
+    <path id="notem.run.classpath">
+        <pathelement location="${notem.deploy.dir}/conf" />
+        <fileset dir="${notem.deploy.dir}/lib" includes="*.jar" />
+    </path>
+
+
+    <target name="clean" description="Removes all generated files.">
+        <delete dir="${notem.build.dir}" quiet="yes" />
+    </target>
+
+    <target name="deploy" depends="build, dist" 
+            description="Copy files to deployment directory">
+
+        <mkdir dir="${notem.deploy.dir}" />
+        <mkdir dir="${notem.deploy.dir}/notes" />
+
+        <!-- Libraries, including our own -->
+        <mkdir dir="${notem.deploy.dir}/lib" />
+        <sync todir="${notem.deploy.dir}/lib">
+            <fileset dir="${notem.lib.dir}" />
+            <fileset file="${notem.target}" />
+        </sync>
+
+        <!-- Website-->
+        <mkdir dir="${notem.deploy.dir}/webapp" />
+        <sync todir="${notem.deploy.dir}/webapp">
+            <fileset dir="${notem.dir}/webapp" />
+            <fileset file="${notem.dist.file}" />
+        </sync>
+
+        <!-- Configuration (including Hibernate) -->
+        <mkdir dir="${notem.deploy.dir}/conf" />
+        <sync todir="${notem.deploy.dir}/conf">
+            <fileset dir="${notem.dir}/conf" />
+        </sync>
+
+
+    </target>
+
+    <target name="run" description="Run the server">
+
+        <ant target="-runapp" />
+        
+    </target>
+
+    <target name="debug" description="Run the server in debug mode">
+
+        <property name="jvmarg"
+                  value="-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005" />        
+        <ant target="-runapp" />
+
+    </target>
+
+    <target name="-runapp" depends="deploy">
+
+        <property name="jvmarg" value="" />
+        <java classname="com.cwinters.notem.Notem"
+              classpathref="notem.run.classpath"
+              fork="true"
+              dir="${notem.deploy.dir}" >
+            <sysproperty key="java.endorsed.dirs" value="${notem.deploy.dir}/lib/endorsed" />
+            <jvmarg line="-ea ${jvmarg}" />
+            <arg value="notes" />
+        </java>
+
+    </target>
+
+    <target name="build"
+            description="Compile classes and create JAR">
+
+        <mkdir dir="${notem.compile.dir}" />
+        <javac destdir="${notem.compile.dir}" debug="on"
+               classpathref="notem.build.classpath"
+               target="1.5" source="1.5">
+            <compilerarg value="-Xlint:unchecked" />
+            <src path="${notem.src.dir}" />
+        </javac>
+        <jar basedir="${notem.compile.dir}" destfile="${notem.target}" />
+
+    </target>
+
+    <target name="dist" depends="build"
+            description="Creates a distributable archive (ZIP)">
+
+        <property name="notem.dist-lib.dir" location="${notem.dist.dir}/lib" />
+
+        <mkdir dir="${notem.dist.dir}" />
+
+        <copy todir="${notem.dist.dir}">
+            <fileset dir="${notem.dir}" includes="README.txt, build.xml, Notem.ipr, Notem.iml" />
+        </copy>
+
+        <mkdir dir="${notem.dist.dir}/lib" />
+        <sync todir="${notem.dist.dir}/lib">
+            <fileset dir="${notem.lib.dir}" />
+            <fileset file="${notem.target}" />
+        </sync>
+
+        <mkdir dir="${notem.dist.dir}/webapp" />
+        <sync todir="${notem.dist.dir}/webapp">
+            <fileset dir="${notem.dir}/webapp" />
+        </sync>
+
+        <mkdir dir="${notem.dist.dir}/conf" />
+        <sync todir="${notem.dist.dir}/conf">
+            <fileset dir="${notem.dir}/conf" />
+        </sync>
+
+        <mkdir dir="${notem.dist.dir}/src" />
+        <sync todir="${notem.dist.dir}/src">
+            <fileset dir="${notem.dir}/src" />
+        </sync>
+
+        <mkdir dir="${notem.dist.dir}/samples" />
+        <sync todir="${notem.dist.dir}/samples">
+            <fileset dir="${notem.dir}/samples" />
+        </sync>
+
+        <zip destfile="${notem.dist.file}">
+            <zipfileset dir="${notem.dist.dir}" prefix="notem-${notem.version}" />
+        </zip>
+
+    </target>
+
+</project>

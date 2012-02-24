@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="suite-all" verbose="1">
+    <test name="tests-all">
+        <groups>
+            <run>
+                <exclude name="selenium" />
+            </run>
+        </groups>
+        <packages>
+            <package name="com.cwinters.notem" />
+            <package name="com.cwinters.notem.jaxb" />
+            <package name="com.cwinters.notem.jersey" />
+            <package name="com.cwinters.notem.resource" />
+            <package name="com.cwinters.notem.util" />
+        </packages>
+    </test>
+</suite>
